@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-settings
+data:
+  APP_MODE: production
+  MAX_CONNECTIONS: "100"
+  CACHE_SIZE: "256MB"

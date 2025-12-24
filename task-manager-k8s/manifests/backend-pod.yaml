@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backend-pod
+  labels:
+    app: backend
+    tier: api
+spec:
+  containers:
+    - name: backend
+      image: httpd:alpine
+      ports:
+        - containerPort: 80
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "50m"
+        limits:
+          memory: "128Mi"
+          cpu: "100m"

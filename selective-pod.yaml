@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-pod
+spec:
+  containers:
+  - name: busybox-pod
+    image: nginx:latest
+    env:
+      - name: DATABASE_HOSTNAME
+        valueFrom:
+          configMapKeyRef:
+            name: db-config
+            key: DB_HOST
+            optional: false
+    

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-secure
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx:latest
+    volumeMounts:
+    - name: nginx-secret-volume
+      mountPath: /etc/secrets
+      readOnly: true
+  volumes:
+    - name: nginx-secret-volume
+      secret:
+        secretName: api-keys
