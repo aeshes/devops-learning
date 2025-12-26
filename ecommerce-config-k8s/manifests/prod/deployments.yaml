@@ -24,10 +24,17 @@ spec:
         volumeMounts:
         - name: app-properties-volume
           mountPath: /app/config
+        - name: jwt-keys-volume
+          mountPath: /etc/jwt/jwt-public.key
+          subPath: jwt-public.key
+          readOnly: true
       volumes:
       - name: app-properties-volume
         configMap:
           name: app-properties
+      - name: jwt-keys-volume
+        secret:
+          secretName: jwt-keys
 
 ---
 apiVersion: apps/v1
@@ -35,6 +42,7 @@ kind: Deployment
 metadata:
   name: nginx-deployment
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: nginx-dev
@@ -48,13 +56,32 @@ spec:
         image: nginx:alpine
         ports:
           - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
         volumeMounts:
         - name: nginx-config-volume
           mountPath: /etc/nginx/conf.d
+        - name: tls-certs
+          mountPath: /etc/ssl/certs/tls.crt
+          subPath: tls.crt
+          readOnly: true
+        - name: tls-certs
+          mountPath: /etc/ssl/private/tls.key
+          subPath: tls.key
+          readOnly: true
       volumes:
         - name: nginx-config-volume
           configMap:
             name: nginx-config
+        - name: tls-certs
+          secret:
+            secretName: tls-certificates
+        
 
 ---
 apiVersion: v1
@@ -81,4 +108,3 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-    nodePort: 30081

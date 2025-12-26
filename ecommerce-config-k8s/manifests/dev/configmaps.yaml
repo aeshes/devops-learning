@@ -7,9 +7,11 @@ data:
   DATABASE_PORT: "5432"
   DATABASE_NAME: "ecommerce_dev"
   API_TIMEOUT: "30"
-  LOG_LEVEL: "DEBUG"
+  LOG_LEVEL: "INFO"
   CACHE_TTL: "300"
+  FEATURE_FLAG_NEW_UI: "true"
 
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -32,12 +34,13 @@ data:
         }
     }
 
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-properties
 data:
-  application-properties: |
+  application.properties: |
     spring.profiles.active=development
     logging.level.com.ecommerce=DEBUG
     management.endpoints.web.exposure.include=*
